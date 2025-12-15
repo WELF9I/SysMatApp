@@ -53,8 +53,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .authorizeRequests()
-            .antMatchers("/api/auth/**").permitAll()
-            .antMatchers("/api/test/**").permitAll()
+            .antMatchers("/auth/**").permitAll()
+            .antMatchers("/test/**").permitAll()
             .antMatchers("/actuator/health").permitAll()
             .antMatchers("/v2/api-docs",
                 "/configuration/ui",

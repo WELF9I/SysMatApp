@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/reservations")
-@CrossOrigin(origins = "*", maxAge = 3600)
+
 public class ReservationController {
     
     @Autowired

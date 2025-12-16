@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="20.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.institut.sysmat.desktop.controller.ReservationActionDialogController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+    <children>
+        <Label text="Détails de la réservation">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+        <VBox spacing="10.0">
+            <children>
+                <HBox spacing="10.0">
+                    <children>
+                        <Label text="Utilisateur:" minWidth="80.0" style="-fx-font-weight: bold;" />
+                        <Label fx:id="userLabel" text="..." />
+                    </children>
+                </HBox>
+                <HBox spacing="10.0">
+                    <children>
+                        <Label text="Matériel:" minWidth="80.0" style="-fx-font-weight: bold;" />
+                        <Label fx:id="materialLabel" text="..." />
+                    </children>
+                </HBox>
+                <HBox spacing="10.0">
+                    <children>
+                        <Label text="Date:" minWidth="80.0" style="-fx-font-weight: bold;" />
+                        <Label fx:id="dateLabel" text="..." />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+        <VBox spacing="5.0">
+            <children>
+                <Label text="Commentaire (optionnel):" />
+                <TextArea fx:id="commentArea" prefHeight="80.0" prefWidth="300.0" />
+            </children>
+        </VBox>
+        <HBox alignment="CENTER_RIGHT" spacing="10.0">
+            <children>
+                <Button mnemonicParsing="false" onAction="#handleCancel" text="Annuler" />
+                <Button mnemonicParsing="false" onAction="#handleRefuse" style="-fx-background-color: #f44336; -fx-text-fill: white;" text="Refuser" />
+                <Button mnemonicParsing="false" onAction="#handleValidate" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Valider" />
+            </children>
+        </HBox>
+    </children>
+</VBox>

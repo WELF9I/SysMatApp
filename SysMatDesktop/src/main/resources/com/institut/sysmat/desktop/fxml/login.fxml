@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<StackPane xmlns="http://javafx.com/javafx/17.0.2-ea" 
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.institut.sysmat.desktop.controller.AuthController"
+           style="-fx-background-color: linear-gradient(to bottom right, #2c3e50, #3498db);">
+    
+    <Rectangle width="1100" height="700" arcWidth="20" arcHeight="20"
+               style="-fx-fill: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 20, 0, 0, 0);" />
+    
+    <HBox spacing="0" prefWidth="1100" prefHeight="700">
+        <!-- Left Panel - Branding -->
+        <VBox prefWidth="500" style="-fx-background-color: linear-gradient(to bottom, #2c3e50, #34495e);"
+              alignment="CENTER" spacing="30">
+            <ImageView fitWidth="150" fitHeight="150" preserveRatio="true">
+                <Image url="@../images/logo.png" />
+            </ImageView>
+            
+            <VBox alignment="CENTER" spacing="10">
+                <Label text="SysMat" style="-fx-text-fill: white;">
+                    <font>
+                        <Font name="Segoe UI" size="48" />
+                    </font>
+                </Label>
+                <Label text="Gestion de Matériels Pédagogiques" 
+                       style="-fx-text-fill: #ecf0f1; -fx-font-size: 16;">
+                </Label>
+            </VBox>
+            
+            <VBox spacing="15" alignment="CENTER_LEFT" prefWidth="350">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <ImageView fitWidth="24" fitHeight="24">
+                        <Image url="@../images/icons/check.png" />
+                    </ImageView>
+                    <Label text="Gestion centralisée des matériels" 
+                           style="-fx-text-fill: #bdc3c7; -fx-font-size: 14;" />
+                </HBox>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <ImageView fitWidth="24" fitHeight="24">
+                        <Image url="@../images/icons/calendar.png" />
+                    </ImageView>
+                    <Label text="Réservation en temps réel" 
+                           style="-fx-text-fill: #bdc3c7; -fx-font-size: 14;" />
+                </HBox>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <ImageView fitWidth="24" fitHeight="24">
+                        <Image url="@../images/icons/security.png" />
+                    </ImageView>
+                    <Label text="Sécurité et authentification" 
+                           style="-fx-text-fill: #bdc3c7; -fx-font-size: 14;" />
+                </HBox>
+            </VBox>
+            
+            <Label text="Institut Supérieur de Technologie" 
+                   style="-fx-text-fill: #7f8c8d; -fx-font-size: 12; -fx-font-style: italic;" />
+        </VBox>
+        
+        <!-- Right Panel - Login Form -->
+        <VBox prefWidth="600" alignment="CENTER" spacing="40" 
+              style="-fx-background-color: white;">
+            
+            <!-- Window Controls -->
+            <HBox alignment="CENTER_RIGHT" spacing="10" prefWidth="600">
+                <Button fx:id="minimizeButton" text="_" styleClass="window-button"
+                        onAction="#handleMinimize" />
+                <Button fx:id="closeButton" text="X" styleClass="window-button"
+                        onAction="#handleClose" />
+            </HBox>
+            
+            <VBox alignment="CENTER" spacing="40">
+                <VBox alignment="CENTER" spacing="10">
+                    <Label text="Connexion" 
+                           style="-fx-text-fill: #2c3e50; -fx-font-size: 32; -fx-font-weight: bold;" />
+                    <Label text="Veuillez saisir vos identifiants" 
+                           style="-fx-text-fill: #7f8c8d; -fx-font-size: 14;" />
+                </VBox>
+                
+                <VBox alignment="CENTER" spacing="25" prefWidth="400">
+                    <VBox spacing="5">
+                        <Label text="Email" 
+                               style="-fx-text-fill: #2c3e50; -fx-font-size: 14; -fx-font-weight: bold;" />
+                        <TextField fx:id="emailField" prefHeight="45" 
+                                   promptText="votre.email@institut.edu"
+                                   styleClass="login-field" />
+                    </VBox>
+                    
+                    <VBox spacing="5">
+                        <Label text="Mot de passe" 
+                               style="-fx-text-fill: #2c3e50; -fx-font-size: 14; -fx-font-weight: bold;" />
+                        <PasswordField fx:id="passwordField" prefHeight="45" 
+                                       promptText="Votre mot de passe"
+                                       styleClass="login-field" />
+                    </VBox>
+                    
+                    <Hyperlink fx:id="forgotPasswordLink" text="Mot de passe oublié ?"
+                               onAction="#handleForgotPassword"
+                               style="-fx-text-fill: #3498db; -fx-font-size: 12;" />
+                    
+                    <Button fx:id="loginButton" text="Se connecter" 
+                            prefWidth="400" prefHeight="50"
+                            onAction="#handleLogin"
+                            styleClass="login-button" />
+                </VBox>
+                
+                <Label text="Version 1.0.0 © 2025 Institut Supérieur" 
+                       style="-fx-text-fill: #95a5a6; -fx-font-size: 11;" />
+            </VBox>
+        </VBox>
+    </HBox>
+    
+    <!-- Loading Overlay -->
+    <StackPane fx:id="loadingPane" visible="false" 
+               style="-fx-background-color: rgba(255,255,255,0.9);">
+        <VBox alignment="CENTER" spacing="20">
+            <ProgressIndicator fx:id="loadingIndicator" progress="-1" 
+                               prefWidth="60" prefHeight="60" />
+            <Label fx:id="loadingLabel" text="Connexion en cours..." 
+                   style="-fx-text-fill: #2c3e50; -fx-font-size: 14;" />
+        </VBox>
+    </StackPane>
+    
+</StackPane>

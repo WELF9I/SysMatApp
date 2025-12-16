@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<StackPane xmlns="http://javafx.com/javafx/17.0.2-ea" 
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.institut.sysmat.desktop.controller.ProfDashboardController"
+           style="-fx-background-color: #f5f7fa;">
+    
+    <VBox spacing="0" prefWidth="1400" prefHeight="800">
+        
+        <!-- Header -->
+        <HBox prefHeight="70" style="-fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);"
+              alignment="CENTER_LEFT" spacing="20">
+            
+            <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 0 0 0 30;">
+                <ImageView fitWidth="40" fitHeight="40">
+                    <Image url="@../images/logo.png" />
+                </ImageView>
+                <VBox spacing="2">
+                    <Label text="SysMat" style="-fx-text-fill: #2c3e50; -fx-font-size: 20; -fx-font-weight: bold;" />
+                    <Label text="Tableau de bord Professeur" 
+                           style="-fx-text-fill: #7f8c8d; -fx-font-size: 12;" />
+                </VBox>
+            </HBox>
+            
+            <Region HBox.hgrow="ALWAYS" />
+            
+            <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 0 30 0 0;">
+                <VBox alignment="CENTER_RIGHT" spacing="2">
+                    <Label fx:id="welcomeLabel" text="Bienvenue, Professeur" 
+                           style="-fx-text-fill: #2c3e50; -fx-font-size: 14; -fx-font-weight: bold;" />
+                    <Label fx:id="departmentLabel" text="Département: Informatique" 
+                           style="-fx-text-fill: #7f8c8d; -fx-font-size: 11;" />
+                </VBox>
+                <Circle radius="20" fill="#3498db" />
+                <ImageView fitWidth="30" fitHeight="30" layoutX="-15" layoutY="-15">
+                    <Image url="@../images/icons/user.png" />
+                </ImageView>
+            </HBox>
+            
+        </HBox>
+        
+        <!-- Content Area -->
+        <HBox spacing="0" VBox.vgrow="ALWAYS">
+            
+            <!-- Sidebar -->
+            <VBox prefWidth="250" style="-fx-background-color: #2c3e50;" spacing="0">
+                
+                <VBox spacing="10" style="-fx-padding: 30 20;">
+                    
+                    <Button fx:id="dashboardButton" text="Tableau de bord" 
+                            styleClass="sidebar-button-active">
+                        <graphic>
+                            <ImageView fitWidth="20" fitHeight="20">
+                                <Image url="@../images/icons/dashboard.png" />
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    
+                    <Button fx:id="materialsButton" text="Matériels disponibles" 
+                            styleClass="sidebar-button" onAction="#navigateToMaterials">
+                        <graphic>
+                            <ImageView fitWidth="20" fitHeight="20">
+                                <Image url="@../images/icons/materials.png" />
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    
+                    <Button fx:id="newReservationButton" text="Nouvelle réservation" 
+                            styleClass="sidebar-button" onAction="#navigateToNewReservation">
+                        <graphic>
+                            <ImageView fitWidth="20" fitHeight="20">
+                                <Image url="@../images/icons/add.png" />
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    
+                    <Button fx:id="myReservationsButton" text="Mes réservations" 
+                            styleClass="sidebar-button" onAction="#navigateToMyReservations">
+                        <graphic>
+                            <ImageView fitWidth="20" fitHeight="20">
+                                <Image url="@../images/icons/reservations.png" />
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    
+                    <VBox VBox.vgrow="ALWAYS" />
+                    
+                    <Line startX="0" endX="210" stroke="#34495e" strokeWidth="1" />
+                    
+                    <Button fx:id="logoutButton" text="Déconnexion" 
+                            styleClass="sidebar-button-logout" onAction="#handleLogout">
+                        <graphic>
+                            <ImageView fitWidth="20" fitHeight="20">
+                                <Image url="@../images/icons/logout.png" />
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    
+                </VBox>
+                
+            </VBox>
+            
+            <!-- Main Content -->
+            <VBox spacing="20" style="-fx-padding: 30;" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+                
+                <!-- Stats Cards -->
+                <HBox spacing="20">
+                    <VBox styleClass="stat-card" prefWidth="250" prefHeight="120">
+                        <Label text="Réservations actives" 
+                               style="-fx-text-fill: #7f8c8d; -fx-font-size: 14;" />
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label fx:id="activeReservationsLabel" text="0" 
+                                   style="-fx-text-fill: #3498db; -fx-font-size: 36; -fx-font-weight: bold;" />
+                            <ImageView fitWidth="30" fitHeight="30">
+                                <Image url="@../images/icons/calendar.png" />
+                            </ImageView>
+                        </HBox>
+                        <Label text="En cours ou à venir" 
+                               style="-fx-text-fill: #95a5a6; -fx-font-size: 12;" />
+                    </VBox>
+                    
+                    <VBox styleClass="stat-card" prefWidth="250" prefHeight="120">
+                        <Label text="Réservations en attente" 
+                               style="-fx-text-fill: #7f8c8d; -fx-font-size: 14;" />
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label fx:id="pendingReservationsLabel" text="0" 
+                                   style="-fx-text-fill: #f39c12; -fx-font-size: 36; -fx-font-weight: bold;" />
+                            <ImageView fitWidth="30" fitHeight="30">
+                                <Image url="@../images/icons/pending.png" />
+                            </ImageView>
+                        </HBox>
+                        <Label text="En attente de validation" 
+                               style="-fx-text-fill: #95a5a6; -fx-font-size: 12;" />
+                    </VBox>
+                    
+                    <VBox styleClass="stat-card" prefWidth="250" prefHeight="120">
+                        <Label text="Matériels disponibles" 
+                               style="-fx-text-fill: #7f8c8d; -fx-font-size: 14;" />
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label fx:id="availableMaterialsLabel" text="0" 
+                                   style="-fx-text-fill: #27ae60; -fx-font-size: 36; -fx-font-weight: bold;" />
+                            <ImageView fitWidth="30" fitHeight="30">
+                                <Image url="@../images/icons/available.png" />
+                            </ImageView>
+                        </HBox>
+                        <Label text="Prêts à être réservés" 
+                               style="-fx-text-fill: #95a5a6; -fx-font-size: 12;" />
+                    </VBox>
+                </HBox>
+                
+                <!-- Quick Actions & Upcoming Reservations -->
+                <HBox spacing="20" VBox.vgrow="ALWAYS">
+                    <!-- Left Column - Quick Actions -->
+                    <VBox spacing="20" prefWidth="400">
+                        <!-- Quick Actions -->
+                        <VBox styleClass="card" spacing="15">
+                            <Label text="Actions rapides" 
+                                   style="-fx-text-fill: #2c3e50; -fx-font-size: 16; -fx-font-weight: bold;" />
+                            
+                            <Button text="Réserver du matériel" styleClass="primary-button" 
+                                    onAction="#navigateToNewReservation" prefHeight="45" />
+                            
+                            <Button text="Voir tous les matériels" styleClass="secondary-button" 
+                                    onAction="#navigateToMaterials" prefHeight="45" />
+                            
+                            <Button text="Historique complet" styleClass="secondary-button" 
+                                    onAction="#navigateToMyReservations" prefHeight="45" />
+                        </VBox>
+                        
+                        <!-- Materials Distribution -->
+                        <VBox styleClass="card" spacing="10">
+                            <Label text="Répartition par type" 
+                                   style="-fx-text-fill: #2c3e50; -fx-font-size: 16; -fx-font-weight: bold;" />
+                            <PieChart fx:id="materialsPieChart" prefHeight="200" />
+                        </VBox>
+                    </VBox>
+                    
+                    <!-- Right Column - Upcoming Reservations -->
+                    <VBox spacing="20" prefWidth="700">
+                        <!-- Upcoming Reservations -->
+                        <VBox styleClass="card" spacing="10">
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <Label text="Prochaines réservations" 
+                                       style="-fx-text-fill: #2c3e50; -fx-font-size: 16; -fx-font-weight: bold;" />
+                                <Button text="Voir tout" styleClass="small-button" 
+                                        onAction="#navigateToMyReservations" />
+                            </HBox>
+                            
+                            <TableView fx:id="upcomingReservationsTable" prefHeight="400">
+                                <columns>
+                                    <TableColumn fx:id="reservationMaterialColumn" text="Matériel" prefWidth="200" />
+                                    <TableColumn fx:id="reservationDateColumn" text="Date/Heure" prefWidth="200" />
+                                    <TableColumn fx:id="reservationStatusColumn" text="Statut" prefWidth="100" />
+                                    <TableColumn fx:id="reservationActionsColumn" text="Actions" prefWidth="150" />
+                                </columns>
+                            </TableView>
+                        </VBox>
+                    </VBox>
+                </HBox>
+                
+            </VBox>
+            
+        </HBox>
+        
+    </VBox>
+    
+    <!-- Loading Overlay -->
+    <StackPane fx:id="loadingPane" visible="false" 
+               style="-fx-background-color: rgba(245,247,250,0.9);">
+        <VBox alignment="CENTER" spacing="20">
+            <ProgressIndicator fx:id="loadingIndicator" progress="-1" 
+                               prefWidth="60" prefHeight="60" />
+        </VBox>
+    </StackPane>
+    
+</StackPane>

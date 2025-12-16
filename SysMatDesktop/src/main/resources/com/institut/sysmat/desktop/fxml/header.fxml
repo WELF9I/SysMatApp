@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox xmlns="http://javafx.com/javafx/17.0.2-ea" 
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.institut.sysmat.desktop.controller.HeaderController"
+      prefHeight="70" style="-fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);"
+      alignment="CENTER_LEFT" spacing="20">
+    
+    <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 0 0 0 30;">
+        <ImageView fitWidth="40" fitHeight="40">
+            <Image url="@../images/logo.png" />
+        </ImageView>
+        <VBox spacing="2">
+            <Label text="SysMat" style="-fx-text-fill: #2c3e50; -fx-font-size: 20; -fx-font-weight: bold;" />
+            <Label text="Gestion de Matériels Pédagogiques" 
+                   style="-fx-text-fill: #7f8c8d; -fx-font-size: 12;" />
+        </VBox>
+    </HBox>
+    
+    <Region HBox.hgrow="ALWAYS" />
+    
+    <Button fx:id="backButton" text="Retour" styleClass="secondary-button" 
+            onAction="#handleBack" visible="false" />
+    
+    <Button fx:id="refreshButton" text="Actualiser" styleClass="secondary-button" 
+            onAction="#handleRefresh">
+        <graphic>
+            <ImageView fitWidth="16" fitHeight="16">
+                <Image url="@../images/icons/refresh.png" />
+            </ImageView>
+        </graphic>
+    </Button>
+</HBox>

@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns="http://javafx.com/javafx/17.0.2-ea" 
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.institut.sysmat.desktop.controller.ReservationController"
+           style="-fx-background-color: #f5f7fa;">
+    
+    <VBox spacing="0" prefWidth="1400" prefHeight="800">
+        
+        <!-- Header with navigation -->
+        <fx:include source="header.fxml" />
+        
+        <!-- Content Area -->
+        <HBox spacing="0" VBox.vgrow="ALWAYS">
+            
+            <!-- Sidebar -->
+            <fx:include source="sidebar.fxml" />
+            
+            <!-- Main Content -->
+            <VBox spacing="20" style="-fx-padding: 30;" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+                
+                <!-- Page Title -->
+                <VBox spacing="5">
+                    <Label text="Nouvelle Réservation" 
+                           style="-fx-text-fill: #2c3e50; -fx-font-size: 24; -fx-font-weight: bold;" />
+                    <Label text="Réservez du matériel pour votre cours" 
+                           style="-fx-text-fill: #7f8c8d; -fx-font-size: 14;" />
+                </VBox>
+                
+                <!-- Form -->
+                <HBox spacing="30" alignment="TOP_LEFT">
+                    <!-- Left Column - Form -->
+                    <VBox styleClass="card" spacing="20" prefWidth="600">
+                        <VBox spacing="15">
+                            <Label text="Sélection du matériel" 
+                                   style="-fx-text-fill: #2c3e50; -fx-font-size: 18; -fx-font-weight: bold;" />
+                            
+                            <HBox spacing="15" alignment="CENTER_LEFT">
+                                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                    <Label text="Matériel *" styleClass="form-label" />
+                                    <ComboBox fx:id="materialComboBox" promptText="Choisir un matériel..."
+                                              styleClass="form-field" prefHeight="45" />
+                                </VBox>
+                                
+                                <VBox spacing="5" prefWidth="100">
+                                    <Label text="Quantité *" styleClass="form-label" />
+                                    <Spinner fx:id="quantitySpinner" min="1" max="100" initialValue="1"
+                                             styleClass="form-field" prefHeight="45" />
+                                </VBox>
+                            </HBox>
+                            
+                            <!-- Material Info -->
+                            <VBox fx:id="materialInfoBox" visible="false" spacing="10"
+                                  style="-fx-padding: 15; -fx-background-color: #f8f9fa; -fx-border-radius: 5;">
+                                <HBox spacing="10">
+                                    <Label text="Nom:" style="-fx-text-fill: #7f8c8d; -fx-font-weight: bold;" />
+                                    <Label fx:id="materialNameLabel" />
+                                </HBox>
+                                <HBox spacing="10">
+                                    <Label text="Disponible:" style="-fx-text-fill: #7f8c8d; -fx-font-weight: bold;" />
+                                    <Label fx:id="availableQuantityLabel" />
+                                </HBox>
+                                <HBox spacing="10">
+                                    <Label text="Localisation:" style="-fx-text-fill: #7f8c8d; -fx-font-weight: bold;" />
+                                    <Label fx:id="materialLocationLabel" />
+                                </HBox>
+                            </VBox>
+                        </VBox>
+                        
+                        <VBox spacing="15">
+                            <Label text="Planning" 
+                                   style="-fx-text-fill: #2c3e50; -fx-font-size: 18; -fx-font-weight: bold;" />
+                            
+                            <HBox spacing="15">
+                                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                    <Label text="Date *" styleClass="form-label" />
+                                    <DatePicker fx:id="datePicker" styleClass="form-field" prefHeight="45" />
+                                </VBox>
+                                
+                                <VBox spacing="5" prefWidth="120">
+                                    <Label text="Heure début *" styleClass="form-label" />
+                                    <ComboBox fx:id="startTimeCombo" promptText="08:30"
+                                              styleClass="form-field" prefHeight="45" />
+                                </VBox>
+                                
+                                <VBox spacing="5" prefWidth="120">
+                                    <Label text="Heure fin *" styleClass="form-label" />
+                                    <ComboBox fx:id="endTimeCombo" promptText="10:30"
+                                              styleClass="form-field" prefHeight="45" />
+                                </VBox>
+                            </HBox>
+                            
+                            <Label fx:id="durationLabel" text="Durée: 0h" 
+                                   style="-fx-text-fill: #3498db; -fx-font-weight: bold;" />
+                        </VBox>
+                        
+                        <VBox spacing="15">
+                            <Label text="Informations complémentaires" 
+                                   style="-fx-text-fill: #2c3e50; -fx-font-size: 18; -fx-font-weight: bold;" />
+                            
+                            <VBox spacing="5">
+                                <Label text="Motif d'utilisation *" styleClass="form-label" />
+                                <TextArea fx:id="motifTextArea" promptText="Décrivez l'utilisation prévue..."
+                                          styleClass="form-field" prefHeight="100" wrapText="true" />
+                            </VBox>
+                            
+                            <Label text="Ce motif sera visible par l'administrateur lors de la validation." 
+                                   style="-fx-text-fill: #95a5a6; -fx-font-size: 12;" />
+                        </VBox>
+                        
+                        <!-- Form Actions -->
+                        <HBox spacing="15" alignment="CENTER_RIGHT">
+                            <Button text="Annuler" styleClass="secondary-button" 
+                                    onAction="#cancelForm" prefWidth="120" />
+                            <Button fx:id="submitButton" text="Soumettre la réservation" 
+                                    styleClass="primary-button" onAction="#submitReservation" 
+                                    prefWidth="200" />
+                        </HBox>
+                    </VBox>
+                    
+                    <!-- Right Column - Calendar Preview -->
+                    <VBox styleClass="card" spacing="15" prefWidth="400">
+                        <Label text="Vue calendrier" 
+                               style="-fx-text-fill: #2c3e50; -fx-font-size: 18; -fx-font-weight: bold;" />
+                        
+                        <!-- Calendar Preview -->
+                        <VBox spacing="10" alignment="CENTER" 
+                              style="-fx-padding: 20; -fx-background-color: #f8f9fa; -fx-border-radius: 5;">
+                            <Label fx:id="selectedDateLabel" text="Lundi 15 juin 2024" 
+                                   style="-fx-text-fill: #2c3e50; -fx-font-size: 16; -fx-font-weight: bold;" />
+                            
+                            <VBox spacing="5" alignment="CENTER">
+                                <Label fx:id="timeSlotLabel" text="08:30 - 10:30" 
+                                       style="-fx-text-fill: #3498db; -fx-font-size: 20; -fx-font-weight: bold;" />
+                                <Label text="(2 heures)" style="-fx-text-fill: #7f8c8d;" />
+                            </VBox>
+                        </VBox>
+                        
+                        <!-- Availability Status -->
+                        <VBox fx:id="availabilityBox" visible="false" spacing="10"
+                              style="-fx-padding: 15; -fx-background-color: #e8f5e9; -fx-border-radius: 5;">
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <ImageView fitWidth="24" fitHeight="24">
+                                    <Image url="@../images/icons/check.png" />
+                                </ImageView>
+                                <Label text="Créneau disponible" 
+                                       style="-fx-text-fill: #27ae60; -fx-font-weight: bold;" />
+                            </HBox>
+                            <Label fx:id="availabilityMessage" text="Le matériel est disponible pour ce créneau." 
+                                   style="-fx-text-fill: #27ae60;" />
+                        </VBox>
+                        
+                        <VBox fx:id="conflictBox" visible="false" spacing="10"
+                              style="-fx-padding: 15; -fx-background-color: #ffebee; -fx-border-radius: 5;">
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <ImageView fitWidth="24" fitHeight="24">
+                                    <Image url="@../images/icons/warning.png" />
+                                </ImageView>
+                                <Label text="Conflit détecté" 
+                                       style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;" />
+                            </HBox>
+                            <Label fx:id="conflictMessage" text="Le matériel n'est pas disponible pour ce créneau." 
+                                   style="-fx-text-fill: #e74c3c;" />
+                        </VBox>
+                        
+                        <!-- Quick Tips -->
+                        <VBox spacing="10">
+                            <Label text="Conseils" 
+                                   style="-fx-text-fill: #2c3e50; -fx-font-weight: bold;" />
+                            <VBox spacing="5">
+                                <HBox spacing="5">
+                                    <Circle radius="3" fill="#3498db" />
+                                    <Label text="Réservez au moins 24h à l'avance" 
+                                           style="-fx-text-fill: #7f8c8d; -fx-font-size: 13;" />
+                                </HBox>
+                                <HBox spacing="5">
+                                    <Circle radius="3" fill="#3498db" />
+                                    <Label text="Vérifiez la disponibilité en temps réel" 
+                                           style="-fx-text-fill: #7f8c8d; -fx-font-size: 13;" />
+                                </HBox>
+                                <HBox spacing="5">
+                                    <Circle radius="3" fill="#3498db" />
+                                    <Label text="Les réservations sont valables pour 2h maximum" 
+                                           style="-fx-text-fill: #7f8c8d; -fx-font-size: 13;" />
+                                </HBox>
+                            </VBox>
+                        </VBox>
+                    </VBox>
+                </HBox>
+                
+            </VBox>
+            
+        </HBox>
+        
+    </VBox>
+    
+    <!-- Loading Overlay -->
+    <StackPane fx:id="loadingPane" visible="false" 
+               style="-fx-background-color: rgba(245,247,250,0.9);">
+        <VBox alignment="CENTER" spacing="20">
+            <ProgressIndicator fx:id="loadingIndicator" progress="-1" 
+                               prefWidth="60" prefHeight="60" />
+        </VBox>
+    </StackPane>
+    
+</StackPane>

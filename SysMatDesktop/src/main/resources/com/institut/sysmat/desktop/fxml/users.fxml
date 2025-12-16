@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<StackPane xmlns="http://javafx.com/javafx/17.0.2-ea" 
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.institut.sysmat.desktop.controller.UsersController"
+           style="-fx-background-color: #f5f7fa;">
+    
+    <VBox spacing="0" prefWidth="1400" prefHeight="800">
+        
+        <!-- Header with navigation -->
+        <fx:include source="header.fxml" />
+        
+        <!-- Content Area -->
+        <HBox spacing="0" VBox.vgrow="ALWAYS">
+            
+            <!-- Sidebar -->
+            <fx:include source="sidebar.fxml" />
+            
+            <!-- Main Content -->
+            <VBox spacing="20" style="-fx-padding: 30;" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+                
+                <!-- Page Title and Actions -->
+                <HBox alignment="CENTER_LEFT" spacing="20">
+                    <VBox>
+                        <Label text="Gestion des Utilisateurs" 
+                               style="-fx-text-fill: #2c3e50; -fx-font-size: 24; -fx-font-weight: bold;" />
+                        <Label text="Gérez les comptes administrateurs et professeurs" 
+                               style="-fx-text-fill: #7f8c8d; -fx-font-size: 14;" />
+                    </VBox>
+                    
+                    <Region HBox.hgrow="ALWAYS" />
+                    
+                    <Button fx:id="addUserButton" text="Ajouter un utilisateur" 
+                            styleClass="primary-button" onAction="#showAddUserDialog">
+                        <graphic>
+                            <ImageView fitWidth="16" fitHeight="16">
+                                <Image url="@../images/icons/add.png" />
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                </HBox>
+                
+                <!-- Search and Filter -->
+                <HBox spacing="15" alignment="CENTER_LEFT">
+                    <TextField fx:id="searchField" promptText="Rechercher un utilisateur..."
+                               styleClass="form-field" prefWidth="300" />
+                    
+                    <ComboBox fx:id="roleFilterCombo" promptText="Rôle"
+                              styleClass="form-field" prefWidth="150" />
+                    
+                    <ComboBox fx:id="statusFilterCombo" promptText="Statut"
+                              styleClass="form-field" prefWidth="150" />
+                    
+                    <ComboBox fx:id="departmentFilterCombo" promptText="Département"
+                              styleClass="form-field" prefWidth="200" />
+                    
+                    <Button text="Rechercher" styleClass="primary-button" onAction="#searchUsers">
+                        <graphic>
+                            <ImageView fitWidth="16" fitHeight="16">
+                                <Image url="@../images/icons/search.png" />
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                </HBox>
+                
+                <!-- Users Table -->
+                <VBox styleClass="card" spacing="10" VBox.vgrow="ALWAYS">
+                    <TableView fx:id="usersTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colId" text="ID" prefWidth="50" />
+                            <TableColumn fx:id="colNom" text="Nom" prefWidth="120" />
+                            <TableColumn fx:id="colPrenom" text="Prénom" prefWidth="120" />
+                            <TableColumn fx:id="colEmail" text="Email" prefWidth="200" />
+                            <TableColumn fx:id="colRole" text="Rôle" prefWidth="100" />
+                            <TableColumn fx:id="colDepartement" text="Département" prefWidth="120" />
+                            <TableColumn fx:id="colStatus" text="Statut" prefWidth="100" />
+                            <TableColumn fx:id="colDateCreation" text="Date création" prefWidth="150" />
+                            <TableColumn fx:id="colActions" text="Actions" prefWidth="200" />
+                        </columns>
+                    </TableView>
+                    
+                    <!-- Stats Footer -->
+                    <HBox alignment="CENTER_LEFT" spacing="20">
+                        <HBox spacing="5">
+                            <Circle radius="4" fill="#3498db" />
+                            <Label fx:id="totalUsersLabel" text="Total: 0 utilisateurs" 
+                                   style="-fx-text-fill: #7f8c8d;" />
+                        </HBox>
+                        
+                        <HBox spacing="5">
+                            <Circle radius="4" fill="#27ae60" />
+                            <Label fx:id="activeUsersLabel" text="Actifs: 0" 
+                                   style="-fx-text-fill: #27ae60;" />
+                        </HBox>
+                        
+                        <HBox spacing="5">
+                            <Circle radius="4" fill="#e74c3c" />
+                            <Label fx:id="inactiveUsersLabel" text="Inactifs: 0" 
+                                   style="-fx-text-fill: #e74c3c;" />
+                        </HBox>
+                        
+                        <HBox spacing="5">
+                            <Circle radius="4" fill="#9b59b6" />
+                            <Label fx:id="adminCountLabel" text="Administrateurs: 0" 
+                                   style="-fx-text-fill: #9b59b6;" />
+                        </HBox>
+                        
+                        <HBox spacing="5">
+                            <Circle radius="4" fill="#f39c12" />
+                            <Label fx:id="professorCountLabel" text="Professeurs: 0" 
+                                   style="-fx-text-fill: #f39c12;" />
+                        </HBox>
+                    </HBox>
+                </VBox>
+                
+            </VBox>
+            
+        </HBox>
+        
+    </VBox>
+    
+    <!-- Loading Overlay -->
+    <StackPane fx:id="loadingPane" visible="false" 
+               style="-fx-background-color: rgba(245,247,250,0.9);">
+        <VBox alignment="CENTER" spacing="20">
+            <ProgressIndicator fx:id="loadingIndicator" progress="-1" 
+                               prefWidth="60" prefHeight="60" />
+        </VBox>
+    </StackPane>
+    
+</StackPane>

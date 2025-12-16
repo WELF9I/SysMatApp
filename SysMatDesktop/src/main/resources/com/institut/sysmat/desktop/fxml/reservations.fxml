@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<StackPane xmlns="http://javafx.com/javafx/17.0.2-ea" 
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.institut.sysmat.desktop.controller.ReservationController"
+           style="-fx-background-color: #f5f7fa;">
+    
+    <VBox spacing="0" prefWidth="1400" prefHeight="800">
+        
+        <!-- Header with navigation -->
+        <fx:include source="header.fxml" />
+        
+        <!-- Content Area -->
+        <HBox spacing="0" VBox.vgrow="ALWAYS">
+            
+            <!-- Sidebar -->
+            <fx:include source="sidebar.fxml" />
+            
+            <!-- Main Content -->
+            <VBox spacing="20" style="-fx-padding: 30;" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+                
+                <!-- Page Title -->
+                <HBox alignment="CENTER_LEFT" spacing="20">
+                    <VBox>
+                        <Label text="Gestion des Réservations" 
+                               style="-fx-text-fill: #2c3e50; -fx-font-size: 24; -fx-font-weight: bold;" />
+                        <Label fx:id="pageSubtitle" text="Visualisez et gérez toutes les réservations" 
+                               style="-fx-text-fill: #7f8c8d; -fx-font-size: 14;" />
+                    </VBox>
+                    
+                    <Region HBox.hgrow="ALWAYS" />
+                    
+                    <Button fx:id="exportButton" text="Exporter" styleClass="secondary-button">
+                        <graphic>
+                            <ImageView fitWidth="16" fitHeight="16">
+                                <Image url="@../images/icons/reports.png" />
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                </HBox>
+                
+                <!-- Filter Controls -->
+                <VBox styleClass="card" spacing="15">
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <DatePicker fx:id="startDatePicker" promptText="Date début" 
+                                    styleClass="form-field" />
+                        <Label text="à" />
+                        <DatePicker fx:id="endDatePicker" promptText="Date fin" 
+                                    styleClass="form-field" />
+                        
+                        <ComboBox fx:id="statusFilterCombo" promptText="Statut"
+                                  styleClass="form-field" prefWidth="150" />
+                        
+                        <ComboBox fx:id="materialFilterCombo" promptText="Matériel"
+                                  styleClass="form-field" prefWidth="200" />
+                        
+                        <TextField fx:id="userSearchField" promptText="Rechercher utilisateur..."
+                                   styleClass="form-field" prefWidth="200" />
+                        
+                        <Button text="Appliquer" styleClass="primary-button" onAction="#applyFilters">
+                            <graphic>
+                                <ImageView fitWidth="16" fitHeight="16">
+                                    <Image url="@../images/icons/filter.png" />
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        
+                        <Button text="Réinitialiser" styleClass="small-button" onAction="#resetFilters" />
+                    </HBox>
+                    
+                    <!-- Stats Bar -->
+                    <HBox spacing="30" alignment="CENTER_LEFT">
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <Circle radius="5" fill="#FFA726" />
+                            <Label fx:id="pendingCountLabel" text="0" 
+                                   style="-fx-text-fill: #2c3e50; -fx-font-weight: bold;" />
+                            <Label text="en attente" style="-fx-text-fill: #7f8c8d;" />
+                        </HBox>
+                        
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <Circle radius="5" fill="#4CAF50" />
+                            <Label fx:id="confirmedCountLabel" text="0" 
+                                   style="-fx-text-fill: #2c3e50; -fx-font-weight: bold;" />
+                            <Label text="confirmées" style="-fx-text-fill: #7f8c8d;" />
+                        </HBox>
+                        
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <Circle radius="5" fill="#F44336" />
+                            <Label fx:id="cancelledCountLabel" text="0" 
+                                   style="-fx-text-fill: #2c3e50; -fx-font-weight: bold;" />
+                            <Label text="annulées" style="-fx-text-fill: #7f8c8d;" />
+                        </HBox>
+                    </HBox>
+                </VBox>
+                
+                <!-- Reservations Table -->
+                <VBox styleClass="card" spacing="10" VBox.vgrow="ALWAYS">
+                    <TableView fx:id="reservationsTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colId" text="ID" prefWidth="50" />
+                            <TableColumn fx:id="colUser" text="Utilisateur" prefWidth="150" />
+                            <TableColumn fx:id="colMaterial" text="Matériel" prefWidth="150" />
+                            <TableColumn fx:id="colQuantity" text="Quantité" prefWidth="80" />
+                            <TableColumn fx:id="colDateDebut" text="Date début" prefWidth="150" />
+                            <TableColumn fx:id="colDateFin" text="Date fin" prefWidth="150" />
+                            <TableColumn fx:id="colStatus" text="Statut" prefWidth="120" />
+                            <TableColumn fx:id="colDateReservation" text="Date réservation" prefWidth="150" />
+                            <TableColumn fx:id="colActions" text="Actions" prefWidth="200" />
+                        </columns>
+                    </TableView>
+                    
+                    <!-- Pagination -->
+                    <HBox alignment="CENTER_RIGHT" spacing="10">
+                        <Button text="Précédent" styleClass="small-button" />
+                        <Label text="Page 1 sur 1" style="-fx-text-fill: #7f8c8d;" />
+                        <Button text="Suivant" styleClass="small-button" />
+                    </HBox>
+                </VBox>
+                
+            </VBox>
+            
+        </HBox>
+        
+    </VBox>
+    
+    <!-- Loading Overlay -->
+    <StackPane fx:id="loadingPane" visible="false" 
+               style="-fx-background-color: rgba(245,247,250,0.9);">
+        <VBox alignment="CENTER" spacing="20">
+            <ProgressIndicator fx:id="loadingIndicator" progress="-1" 
+                               prefWidth="60" prefHeight="60" />
+        </VBox>
+    </StackPane>
+    
+</StackPane>

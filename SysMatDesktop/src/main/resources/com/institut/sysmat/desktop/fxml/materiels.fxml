@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns="http://javafx.com/javafx/17.0.2-ea" 
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.institut.sysmat.desktop.controller.MaterielController"
+           style="-fx-background-color: #f5f7fa;">
+    
+    <VBox spacing="0" prefWidth="1400" prefHeight="800">
+        
+        <!-- Header with navigation -->
+        <fx:include source="header.fxml" />
+        
+        <!-- Content Area -->
+        <HBox spacing="0" VBox.vgrow="ALWAYS">
+            
+            <!-- Sidebar -->
+            <fx:include source="sidebar.fxml" />
+            
+            <!-- Main Content -->
+            <VBox spacing="20" style="-fx-padding: 30;" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+                
+                <!-- Page Title and Actions -->
+                <HBox alignment="CENTER_LEFT" spacing="20">
+                    <VBox>
+                        <Label text="Gestion des Matériels" 
+                               style="-fx-text-fill: #2c3e50; -fx-font-size: 24; -fx-font-weight: bold;" />
+                        <Label text="Gérez le catalogue des matériels pédagogiques" 
+                               style="-fx-text-fill: #7f8c8d; -fx-font-size: 14;" />
+                    </VBox>
+                    
+                    <Region HBox.hgrow="ALWAYS" />
+                    
+                    <Button fx:id="addMaterialButton" text="Ajouter un matériel" 
+                            styleClass="primary-button" onAction="#showAddMaterialDialog">
+                        <graphic>
+                            <ImageView fitWidth="16" fitHeight="16">
+                                <Image url="@../images/icons/add.png" />
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                </HBox>
+                
+                <!-- Search and Filter Bar -->
+                <HBox spacing="15" alignment="CENTER_LEFT">
+                    <TextField fx:id="searchField" promptText="Rechercher un matériel..."
+                               styleClass="form-field" prefWidth="300" />
+                    
+                    <ComboBox fx:id="typeFilterCombo" promptText="Type de matériel"
+                              styleClass="form-field" prefWidth="200" />
+                    
+                    <ComboBox fx:id="statusFilterCombo" promptText="Statut"
+                              styleClass="form-field" prefWidth="150" />
+                    
+                    <Button text="Filtrer" styleClass="secondary-button" onAction="#filterMaterials">
+                        <graphic>
+                            <ImageView fitWidth="16" fitHeight="16">
+                                <Image url="@../images/icons/filter.png" />
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    
+                    <Button text="Réinitialiser" styleClass="small-button" onAction="#resetFilters" />
+                </HBox>
+                
+                <!-- Materials Table -->
+                <VBox styleClass="card" spacing="10" VBox.vgrow="ALWAYS">
+                    <TableView fx:id="materialsTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colId" text="ID" prefWidth="50" />
+                            <TableColumn fx:id="colNom" text="Nom" prefWidth="200" />
+                            <TableColumn fx:id="colType" text="Type" prefWidth="120" />
+                            <TableColumn fx:id="colQuantiteTotale" text="Quantité totale" prefWidth="100" />
+                            <TableColumn fx:id="colQuantiteDisponible" text="Disponible" prefWidth="100" />
+                            <TableColumn fx:id="colEtat" text="État" prefWidth="120" />
+                            <TableColumn fx:id="colLocalisation" text="Localisation" prefWidth="150" />
+                            <TableColumn fx:id="colActions" text="Actions" prefWidth="200" />
+                        </columns>
+                    </TableView>
+                    
+                    <!-- Table Footer -->
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label fx:id="totalLabel" text="Total: 0 matériels" 
+                               style="-fx-text-fill: #7f8c8d; -fx-font-size: 14;" />
+                        <Label fx:id="availableLabel" text="Disponibles: 0" 
+                               style="-fx-text-fill: #27ae60; -fx-font-size: 14;" />
+                        <Label fx:id="lowStockLabel" text="Stock bas: 0" 
+                               style="-fx-text-fill: #e74c3c; -fx-font-size: 14;" />
+                    </HBox>
+                </VBox>
+                
+            </VBox>
+            
+        </HBox>
+        
+    </VBox>
+    
+    <!-- Loading Overlay -->
+    <StackPane fx:id="loadingPane" visible="false" 
+               style="-fx-background-color: rgba(245,247,250,0.9);">
+        <VBox alignment="CENTER" spacing="20">
+            <ProgressIndicator fx:id="loadingIndicator" progress="-1" 
+                               prefWidth="60" prefHeight="60" />
+        </VBox>
+    </StackPane>
+    
+</StackPane>

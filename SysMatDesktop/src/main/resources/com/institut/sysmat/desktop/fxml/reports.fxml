@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns="http://javafx.com/javafx/17.0.2-ea" 
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.institut.sysmat.desktop.controller.ReportsController"
+           style="-fx-background-color: #f5f7fa;">
+    
+    <VBox spacing="0" prefWidth="1400" prefHeight="800">
+        
+        <!-- Header with navigation -->
+        <fx:include source="header.fxml" />
+        
+        <!-- Content Area -->
+        <HBox spacing="0" VBox.vgrow="ALWAYS">
+            
+            <!-- Sidebar -->
+            <fx:include source="sidebar.fxml" />
+            
+            <!-- Main Content -->
+            <VBox spacing="20" style="-fx-padding: 30;" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+                
+                <!-- Page Title and Export -->
+                <HBox alignment="CENTER_LEFT" spacing="20">
+                    <VBox>
+                        <Label text="Rapports et Statistiques" 
+                               style="-fx-text-fill: #2c3e50; -fx-font-size: 24; -fx-font-weight: bold;" />
+                        <Label text="Analysez l'utilisation du système et générez des rapports" 
+                               style="-fx-text-fill: #7f8c8d; -fx-font-size: 14;" />
+                    </VBox>
+                    
+                    <Region HBox.hgrow="ALWAYS" />
+                    
+                    <!-- Date Range Selector -->
+                    <HBox spacing="10" alignment="CENTER_RIGHT">
+                        <DatePicker fx:id="startDatePicker" promptText="Date début" 
+                                    styleClass="form-field" />
+                        <Label text="à" />
+                        <DatePicker fx:id="endDatePicker" promptText="Date fin" 
+                                    styleClass="form-field" />
+                        
+                        <Button text="Générer" styleClass="primary-button" onAction="#generateReport">
+                            <graphic>
+                                <ImageView fitWidth="16" fitHeight="16">
+                                    <Image url="@../images/icons/reports.png" />
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        
+                        <ComboBox fx:id="exportFormatCombo" promptText="Format"
+                                  styleClass="form-field" prefWidth="120" />
+                        
+                        <Button text="Exporter" styleClass="success-button" onAction="#exportReport">
+                            <graphic>
+                                <ImageView fitWidth="16" fitHeight="16">
+                                    <Image url="@../images/icons/download.png" />
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                    </HBox>
+                </HBox>
+                
+                <!-- Tabs for Different Reports -->
+                <TabPane VBox.vgrow="ALWAYS">
+                    
+                    <!-- Tab 1: Overview -->
+                    <Tab text="Vue d'ensemble">
+                        <VBox spacing="20" style="-fx-padding: 20;">
+                            <!-- Summary Stats -->
+                            <HBox spacing="20">
+                                <VBox styleClass="stat-card" prefWidth="200" prefHeight="100">
+                                    <Label text="Réservations totales" 
+                                           style="-fx-text-fill: #7f8c8d; -fx-font-size: 14;" />
+                                    <Label fx:id="totalReservationsLabel" text="0" 
+                                           style="-fx-text-fill: #2c3e50; -fx-font-size: 28; -fx-font-weight: bold;" />
+                                </VBox>
+                                
+                                <VBox styleClass="stat-card" prefWidth="200" prefHeight="100">
+                                    <Label text="Matériels utilisés" 
+                                           style="-fx-text-fill: #7f8c8d; -fx-font-size: 14;" />
+                                    <Label fx:id="usedMaterialsLabel" text="0" 
+                                           style="-fx-text-fill: #3498db; -fx-font-size: 28; -fx-font-weight: bold;" />
+                                </VBox>
+                                
+                                <VBox styleClass="stat-card" prefWidth="200" prefHeight="100">
+                                    <Label text="Utilisateurs actifs" 
+                                           style="-fx-text-fill: #7f8c8d; -fx-font-size: 14;" />
+                                    <Label fx:id="activeUsersLabel" text="0" 
+                                           style="-fx-text-fill: #27ae60; -fx-font-size: 28; -fx-font-weight: bold;" />
+                                </VBox>
+                                
+                                <VBox styleClass="stat-card" prefWidth="200" prefHeight="100">
+                                    <Label text="Taux d'occupation" 
+                                           style="-fx-text-fill: #7f8c8d; -fx-font-size: 14;" />
+                                    <Label fx:id="occupancyRateLabel" text="0%" 
+                                           style="-fx-text-fill: #f39c12; -fx-font-size: 28; -fx-font-weight: bold;" />
+                                </VBox>
+                            </HBox>
+                            
+                            <!-- Charts Row 1 -->
+                            <HBox spacing="20" VBox.vgrow="ALWAYS">
+                                <VBox styleClass="card" spacing="10" prefWidth="400">
+                                    <Label text="Réservations par statut" 
+                                           style="-fx-text-fill: #2c3e50; -fx-font-size: 16; -fx-font-weight: bold;" />
+                                    <PieChart fx:id="statusPieChart" prefHeight="250" />
+                                </VBox>
+                                
+                                <VBox styleClass="card" spacing="10" prefWidth="400">
+                                    <Label text="Utilisation par matériel" 
+                                           style="-fx-text-fill: #2c3e50; -fx-font-size: 16; -fx-font-weight: bold;" />
+                                    <BarChart fx:id="materialUsageChart" prefHeight="250">
+                                        <xAxis>
+                                            <CategoryAxis fx:id="materialXAxis" />
+                                        </xAxis>
+                                        <yAxis>
+                                            <NumberAxis fx:id="materialYAxis" />
+                                        </yAxis>
+                                    </BarChart>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </Tab>
+                    
+                    <!-- Tab 2: Detailed Analysis -->
+                    <Tab text="Analyse détaillée">
+                        <VBox spacing="20" style="-fx-padding: 20;">
+                            <HBox spacing="20" VBox.vgrow="ALWAYS">
+                                <!-- Time Series Chart -->
+                                <VBox styleClass="card" spacing="10" prefWidth="600">
+                                    <Label text="Évolution des réservations" 
+                                           style="-fx-text-fill: #2c3e50; -fx-font-size: 16; -fx-font-weight: bold;" />
+                                    <LineChart fx:id="reservationsTrendChart" prefHeight="300">
+                                        <xAxis>
+                                            <CategoryAxis fx:id="trendXAxis" />
+                                        </xAxis>
+                                        <yAxis>
+                                            <NumberAxis fx:id="trendYAxis" />
+                                        </yAxis>
+                                    </LineChart>
+                                </VBox>
+                                
+                                <!-- Department Stats -->
+                                <VBox styleClass="card" spacing="10" prefWidth="400">
+                                    <Label text="Utilisation par département" 
+                                           style="-fx-text-fill: #2c3e50; -fx-font-size: 16; -fx-font-weight: bold;" />
+                                    <TableView fx:id="departmentTable" prefHeight="300">
+                                        <columns>
+                                            <TableColumn text="Département" prefWidth="150" />
+                                            <TableColumn text="Réservations" prefWidth="100" />
+                                            <TableColumn text="Taux" prefWidth="100" />
+                                        </columns>
+                                    </TableView>
+                                </VBox>
+                            </HBox>
+                            
+                            <!-- Peak Hours -->
+                            <VBox styleClass="card" spacing="10">
+                                <Label text="Heures de pointe" 
+                                       style="-fx-text-fill: #2c3e50; -fx-font-size: 16; -fx-font-weight: bold;" />
+                                <BarChart fx:id="peakHoursChart" prefHeight="200">
+                                    <xAxis>
+                                        <CategoryAxis fx:id="hoursXAxis" />
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis fx:id="hoursYAxis" />
+                                    </yAxis>
+                                </BarChart>
+                            </VBox>
+                        </VBox>
+                    </Tab>
+                    
+                    <!-- Tab 3: Export Data -->
+                    <Tab text="Export des données">
+                        <VBox spacing="20" style="-fx-padding: 20;">
+                            <Label text="Exporter les données du système" 
+                                   style="-fx-text-fill: #2c3e50; -fx-font-size: 18; -fx-font-weight: bold;" />
+                            
+                            <!-- Export Options -->
+                            <VBox styleClass="card" spacing="15">
+                                <Label text="Sélectionnez les données à exporter:" 
+                                       style="-fx-text-fill: #2c3e50; -fx-font-size: 14;" />
+                                
+                                <HBox spacing="20">
+                                    <VBox spacing="10">
+                                        <CheckBox fx:id="exportMaterialsCheck" text="Matériels" selected="true" />
+                                        <CheckBox fx:id="exportReservationsCheck" text="Réservations" selected="true" />
+                                        <CheckBox fx:id="exportUsersCheck" text="Utilisateurs" selected="true" />
+                                    </VBox>
+                                    
+                                    <VBox spacing="10">
+                                        <CheckBox fx:id="exportStatisticsCheck" text="Statistiques" selected="true" />
+                                        <CheckBox fx:id="exportLogsCheck" text="Journaux" />
+                                        <CheckBox fx:id="includeChartsCheck" text="Inclure les graphiques" />
+                                    </VBox>
+                                </HBox>
+                                
+                                <!-- Format Options -->
+                                <HBox spacing="15" alignment="CENTER_LEFT">
+                                    <Label text="Format:" style="-fx-text-fill: #2c3e50; -fx-font-weight: bold;" />
+                                    <RadioButton fx:id="pdfRadio" text="PDF" selected="true" toggleGroup="$formatGroup" />
+                                    <RadioButton fx:id="excelRadio" text="Excel" toggleGroup="$formatGroup" />
+                                    <RadioButton fx:id="csvRadio" text="CSV" toggleGroup="$formatGroup" />
+                                </HBox>
+                                
+                                <!-- Export Button -->
+                                <HBox alignment="CENTER_RIGHT">
+                                    <Button text="Générer l'export" styleClass="success-button" 
+                                            prefWidth="150" prefHeight="40" onAction="#generateExport">
+                                        <graphic>
+                                            <ImageView fitWidth="20" fitHeight="20">
+                                                <Image url="@../images/icons/download.png" />
+                                            </ImageView>
+                                        </graphic>
+                                    </Button>
+                                </HBox>
+                            </VBox>
+                            
+                            <!-- Export History -->
+                            <VBox styleClass="card" spacing="10">
+                                <Label text="Historique des exports" 
+                                       style="-fx-text-fill: #2c3e50; -fx-font-size: 16; -fx-font-weight: bold;" />
+                                <TableView fx:id="exportHistoryTable" prefHeight="200">
+                                    <columns>
+                                        <TableColumn text="Date" prefWidth="150" />
+                                        <TableColumn text="Format" prefWidth="100" />
+                                        <TableColumn text="Données" prefWidth="200" />
+                                        <TableColumn text="Taille" prefWidth="100" />
+                                        <TableColumn text="Actions" prefWidth="100" />
+                                    </columns>
+                                </TableView>
+                            </VBox>
+                        </VBox>
+                    </Tab>
+                    
+                </TabPane>
+                
+            </VBox>
+            
+        </HBox>
+        
+    </VBox>
+    
+    <!-- Loading Overlay -->
+    <StackPane fx:id="loadingPane" visible="false" 
+               style="-fx-background-color: rgba(245,247,250,0.9);">
+        <VBox alignment="CENTER" spacing="20">
+            <ProgressIndicator fx:id="loadingIndicator" progress="-1" 
+                               prefWidth="60" prefHeight="60" />
+        </VBox>
+    </StackPane>
+    
+</StackPane>

@@ -69,7 +69,6 @@ public class ReservationController implements Initializable {
     @FXML private DatePicker datePicker;
     @FXML private ComboBox<String> startTimeCombo;
     @FXML private ComboBox<String> endTimeCombo;
-    @FXML private Label durationLabel;
     @FXML private TextArea motifTextArea;
     
     @FXML private Label materialNameLabel;
@@ -310,56 +309,33 @@ public class ReservationController implements Initializable {
         materialFilterCombo.getSelectionModel().selectFirst();
     }
     
-    @FXML private TextField startTimeField;
-    @FXML private TextField endTimeField;
-
     @FXML
     private void applyFilters() {
         LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
-        String startTimeStr = startTimeField.getText();
-        String endTimeStr = endTimeField.getText();
         
         String selectedStatus = statusFilterCombo.getValue();
         String selectedMaterial = materialFilterCombo.getValue();
         String searchTerm = userSearchField.getText().toLowerCase();
         
-        LocalTime startTime = null;
-        LocalTime endTime = null;
-        
-        try {
-            if (startTimeStr != null && !startTimeStr.isEmpty()) {
-                startTime = LocalTime.parse(startTimeStr, timeFormatter);
-            }
-            if (endTimeStr != null && !endTimeStr.isEmpty()) {
-                endTime = LocalTime.parse(endTimeStr, timeFormatter);
-            }
-        } catch (Exception e) {
-            // Ignore invalid time format for filtering
-        }
-        
-        final LocalTime finalStartTime = startTime;
-        final LocalTime finalEndTime = endTime;
-        
         List<Reservation> filtered = allReservations.stream()
             .filter(r -> {
                 if (startDate == null) return true;
-                LocalDateTime startDateTime = r.getDateDebut();
-                if (finalStartTime != null) {
-                    return startDateTime.isAfter(LocalDateTime.of(startDate, finalStartTime).minusSeconds(1));
-                }
-                return startDateTime.toLocalDate().isAfter(startDate.minusDays(1));
+                return r.getDateDebut().toLocalDate().isAfter(startDate.minusDays(1));
             })
             .filter(r -> {
                 if (endDate == null) return true;
-                LocalDateTime endDateTime = r.getDateDebut(); // Filter based on start date usually
-                if (finalEndTime != null) {
-                    return endDateTime.isBefore(LocalDateTime.of(endDate, finalEndTime).plusSeconds(1));
-                }
-                return endDateTime.toLocalDate().isBefore(endDate.plusDays(1));
+                // Filter based on start date being before or on end date
+                return r.getDateDebut().toLocalDate().isBefore(endDate.plusDays(1));
             })
-            .filter(r -> "Tous".equals(selectedStatus) || r.getStatut().equals(selectedStatus))
-            .filter(r -> "Tous".equals(selectedMaterial) || r.getMaterielNom().equals(selectedMaterial))
+            .filter(r -> {
+                if (selectedStatus == null || "Tous".equals(selectedStatus)) return true;
+                return selectedStatus.equals(r.getStatut());
+            })
+            .filter(r -> {
+                if (selectedMaterial == null || "Tous".equals(selectedMaterial)) return true;
+                return selectedMaterial.equals(r.getMaterielNom());
+            })
             .filter(r -> searchTerm.isEmpty() || 
                         r.getUtilisateurFullName().toLowerCase().contains(searchTerm) ||
                         r.getMotifUtilisation().toLowerCase().contains(searchTerm))
@@ -373,8 +349,6 @@ public class ReservationController implements Initializable {
     private void resetFilters() {
         startDatePicker.setValue(LocalDate.now().minusDays(30));
         endDatePicker.setValue(LocalDate.now());
-        if (startTimeField != null) startTimeField.clear();
-        if (endTimeField != null) endTimeField.clear();
         statusFilterCombo.getSelectionModel().selectFirst();
         materialFilterCombo.getSelectionModel().selectFirst();
         userSearchField.clear();
@@ -460,7 +434,6 @@ public class ReservationController implements Initializable {
         // Set default times
         startTimeCombo.getSelectionModel().select("08:30");
         endTimeCombo.getSelectionModel().select("10:30");
-        updateDuration();
         
         // Set default date
         datePicker.setValue(LocalDate.now().plusDays(1));
@@ -535,62 +508,6 @@ public class ReservationController implements Initializable {
     }
     
     @FXML
-    private void updateDuration() {
-        String start = startTimeCombo.getValue();
-        String end = endTimeCombo.getValue();
-        
-        if (start != null && end != null) {
-            try {
-                LocalTime startTime = LocalTime.parse(start, timeFormatter);
-                LocalTime endTime = LocalTime.parse(end, timeFormatter);
-                
-                if (endTime.isAfter(startTime)) {
-                    long hours = java.time.Duration.between(startTime, endTime).toHours();
-                    long minutes = java.time.Duration.between(startTime, endTime).toMinutes() % 60;
-                    
-                    if (hours > 4) {
-                        durationLabel.setStyle("-fx-text-fill: #F44336; -fx-font-weight: bold;");
-                        durationLabel.setText("Durée: " + hours + "h" + (minutes > 0 ? minutes : "") + " (MAX 4h)");
-                        submitButton.setDisable(true);
-                    } else {
-                        durationLabel.setStyle("-fx-text-fill: #3498db; -fx-font-weight: bold;");
-                        durationLabel.setText("Durée: " + hours + "h" + (minutes > 0 ? minutes : ""));
-                        submitButton.setDisable(false);
-                    }
-                } else {
-                    durationLabel.setStyle("-fx-text-fill: #F44336; -fx-font-weight: bold;");
-                    durationLabel.setText("L'heure de fin doit être après l'heure de début");
-                    submitButton.setDisable(true);
-                }
-            } catch (Exception e) {
-                durationLabel.setStyle("-fx-text-fill: #F44336; -fx-font-weight: bold;");
-                durationLabel.setText("Format d'heure invalide");
-                submitButton.setDisable(true);
-            }
-        }
-    }
-    
-    @FXML
-    private void checkAvailability() {
-        // TODO: Implement availability check with backend
-        Materiel selected = materialComboBox.getValue();
-        LocalDate date = datePicker.getValue();
-        String start = startTimeCombo.getValue();
-        String end = endTimeCombo.getValue();
-        
-        if (selected != null && date != null && start != null && end != null) {
-            // Simulate availability check
-            boolean available = true; // Replace with actual API call
-            
-            if (available) {
-                // Show availability message
-            } else {
-                // Show conflict message
-            }
-        }
-    }
-    
-    @FXML
     private void submitReservation() {
         // Validate form
         if (materialComboBox.getValue() == null) {
@@ -623,6 +540,11 @@ public class ReservationController implements Initializable {
             LocalDate date = datePicker.getValue();
             LocalTime startTime = LocalTime.parse(startTimeCombo.getValue(), timeFormatter);
             LocalTime endTime = LocalTime.parse(endTimeCombo.getValue(), timeFormatter);
+            
+            if (!endTime.isAfter(startTime)) {
+                DialogUtil.showError("Erreur", "L'heure de fin doit être après l'heure de début");
+                return;
+            }
             
             request.setDateDebut(LocalDateTime.of(date, startTime));
             request.setDateFin(LocalDateTime.of(date, endTime));
@@ -662,14 +584,6 @@ public class ReservationController implements Initializable {
     
     // ===== COMMON METHODS =====
     private void setupEventHandlers() {
-        // Time combo boxes listeners
-        if (startTimeCombo != null) {
-            startTimeCombo.valueProperty().addListener((observable, oldValue, newValue) -> updateDuration());
-        }
-        if (endTimeCombo != null) {
-            endTimeCombo.valueProperty().addListener((observable, oldValue, newValue) -> updateDuration());
-        }
-        
         // Material combo box listener
         if (materialComboBox != null) {
             materialComboBox.valueProperty().addListener((observable, oldValue, newValue) -> onMaterialSelected());

@@ -48,11 +48,6 @@ public class ProfDashboardController implements Initializable {
     @FXML private StackPane loadingPane;
     @FXML private ProgressIndicator loadingIndicator;
     
-    @FXML private Button materialsButton;
-    @FXML private Button newReservationButton;
-    @FXML private Button myReservationsButton;
-    @FXML private Button logoutButton;
-    
     private final SessionManager sessionManager = SessionManager.getInstance();
     private final MaterielService materielService = new MaterielService();
     private final ReservationService reservationService = new ReservationService();
@@ -68,7 +63,8 @@ public class ProfDashboardController implements Initializable {
     
     private void setupUI() {
         welcomeLabel.setText("Bienvenue, " + sessionManager.getCurrentUserName());
-        departmentLabel.setText("Département: " + sessionManager.getCurrentUser().getDepartement());
+        String dept = sessionManager.getCurrentUser().getDepartement();
+        departmentLabel.setText("Département: " + (dept != null ? dept : "Non assigné"));
         
         setupReservationsTable();
         setupChart();
@@ -252,12 +248,9 @@ public class ProfDashboardController implements Initializable {
     }
     
     private void setupEventHandlers() {
-        materialsButton.setOnAction(event -> navigateToMaterials());
-        newReservationButton.setOnAction(event -> navigateToNewReservation());
-        myReservationsButton.setOnAction(event -> navigateToMyReservations());
-        logoutButton.setOnAction(event -> handleLogout());
+        // Handlers for dashboard items if any
     }
-    
+
     @FXML
     private void navigateToMaterials() {
         try {
@@ -268,7 +261,7 @@ public class ProfDashboardController implements Initializable {
             MaterielController controller = loader.getController();
             controller.setProfessorMode(true);
             
-            Stage stage = (Stage) materialsButton.getScene().getWindow();
+            Stage stage = (Stage) welcomeLabel.getScene().getWindow();
             stage.getScene().setRoot(root);
             stage.centerOnScreen();
             
@@ -284,7 +277,7 @@ public class ProfDashboardController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(AppConfig.VIEW_NEW_RESERVATION));
             Parent root = loader.load();
             
-            Stage stage = (Stage) newReservationButton.getScene().getWindow();
+            Stage stage = (Stage) welcomeLabel.getScene().getWindow();
             stage.getScene().setRoot(root);
             stage.centerOnScreen();
             
@@ -304,7 +297,7 @@ public class ProfDashboardController implements Initializable {
             ReservationController controller = loader.getController();
             controller.setProfessorMode(true);
             
-            Stage stage = (Stage) myReservationsButton.getScene().getWindow();
+            Stage stage = (Stage) welcomeLabel.getScene().getWindow();
             stage.getScene().setRoot(root);
             stage.centerOnScreen();
             
@@ -315,35 +308,8 @@ public class ProfDashboardController implements Initializable {
     }
     
     @FXML
-    private void handleLogout() {
-        if (DialogUtil.showConfirmation("Déconnexion", "Êtes-vous sûr de vouloir vous déconnecter ?")) {
-            sessionManager.clearSession();
-            navigateToLogin();
-        }
-    }
-    
-    @FXML
     private void handleRefresh() {
         loadDashboardData();
-    }
-    
-    private void navigateToLogin() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(AppConfig.VIEW_LOGIN));
-            Parent root = loader.load();
-            
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(Objects.requireNonNull(
-                getClass().getResource(AppConfig.CSS_STYLES)).toExternalForm());
-            
-            Stage stage = (Stage) logoutButton.getScene().getWindow();
-            stage.setScene(scene);
-            stage.centerOnScreen();
-            stage.setMaximized(false);
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
     
     private void showLoading(boolean show) {

@@ -105,9 +105,6 @@
                                               styleClass="form-field" prefHeight="45" />
                                 </VBox>
                             </HBox>
-                            
-                            <Label fx:id="durationLabel" text="Durée: 0h" 
-                                   style="-fx-text-fill: #3498db; -fx-font-weight: bold;" />
                         </VBox>
                         
                         <VBox spacing="15">
@@ -132,75 +129,6 @@
                                     styleClass="primary-button" onAction="#submitReservation" 
                                     prefWidth="200" />
                         </HBox>
-                    </VBox>
-                    
-                    <!-- Right Column - Calendar Preview -->
-                    <VBox styleClass="card" spacing="15" prefWidth="400">
-                        <Label text="Vue calendrier" 
-                               style="-fx-text-fill: #2c3e50; -fx-font-size: 18; -fx-font-weight: bold;" />
-                        
-                        <!-- Calendar Preview -->
-                        <VBox spacing="10" alignment="CENTER" 
-                              style="-fx-padding: 20; -fx-background-color: #f8f9fa; -fx-border-radius: 5;">
-                            <Label fx:id="selectedDateLabel" text="Lundi 15 juin 2024" 
-                                   style="-fx-text-fill: #2c3e50; -fx-font-size: 16; -fx-font-weight: bold;" />
-                            
-                            <VBox spacing="5" alignment="CENTER">
-                                <Label fx:id="timeSlotLabel" text="08:30 - 10:30" 
-                                       style="-fx-text-fill: #3498db; -fx-font-size: 20; -fx-font-weight: bold;" />
-                                <Label text="(2 heures)" style="-fx-text-fill: #7f8c8d;" />
-                            </VBox>
-                        </VBox>
-                        
-                        <!-- Availability Status -->
-                        <VBox fx:id="availabilityBox" visible="false" spacing="10"
-                              style="-fx-padding: 15; -fx-background-color: #e8f5e9; -fx-border-radius: 5;">
-                            <HBox spacing="10" alignment="CENTER_LEFT">
-                                <ImageView fitWidth="24" fitHeight="24">
-                                    <Image url="@../images/icons/check.png" />
-                                </ImageView>
-                                <Label text="Créneau disponible" 
-                                       style="-fx-text-fill: #27ae60; -fx-font-weight: bold;" />
-                            </HBox>
-                            <Label fx:id="availabilityMessage" text="Le matériel est disponible pour ce créneau." 
-                                   style="-fx-text-fill: #27ae60;" />
-                        </VBox>
-                        
-                        <VBox fx:id="conflictBox" visible="false" spacing="10"
-                              style="-fx-padding: 15; -fx-background-color: #ffebee; -fx-border-radius: 5;">
-                            <HBox spacing="10" alignment="CENTER_LEFT">
-                                <ImageView fitWidth="24" fitHeight="24">
-                                    <Image url="@../images/icons/warning.png" />
-                                </ImageView>
-                                <Label text="Conflit détecté" 
-                                       style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;" />
-                            </HBox>
-                            <Label fx:id="conflictMessage" text="Le matériel n'est pas disponible pour ce créneau." 
-                                   style="-fx-text-fill: #e74c3c;" />
-                        </VBox>
-                        
-                        <!-- Quick Tips -->
-                        <VBox spacing="10">
-                            <Label text="Conseils" 
-                                   style="-fx-text-fill: #2c3e50; -fx-font-weight: bold;" />
-                            <VBox spacing="5">
-                                <HBox spacing="5">
-                                    <Circle radius="3" fill="#3498db" />
-                                    <Label text="Réservez au moins 24h à l'avance" 
-                                           style="-fx-text-fill: #7f8c8d; -fx-font-size: 13;" />
-                                </HBox>
-                                <HBox spacing="5">
-                                    <Circle radius="3" fill="#3498db" />
-                                    <Label text="Vérifiez la disponibilité en temps réel" 
-                                           style="-fx-text-fill: #7f8c8d; -fx-font-size: 13;" />
-                                </HBox>
-                                <HBox spacing="5">
-                                    <Circle radius="3" fill="#3498db" />
-                                    <Label text="Les réservations sont valables pour 2h maximum" 
-                                           style="-fx-text-fill: #7f8c8d; -fx-font-size: 13;" />
-                                </HBox>
-                            </VBox>
-                        </VBox>
                     </VBox>
                 </HBox>
                 

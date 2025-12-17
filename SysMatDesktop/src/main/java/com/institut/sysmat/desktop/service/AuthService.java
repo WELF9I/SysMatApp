@@ -40,6 +40,8 @@ public class AuthService {
                             String nom = data.get("nom").getAsString();
                             String prenom = data.get("prenom").getAsString();
                             String userEmail = data.get("email").getAsString();
+                            String departement = data.has("departement") && !data.get("departement").isJsonNull() 
+                                    ? data.get("departement").getAsString() : "N/A";
                             
                             // Créer l'objet utilisateur
                             Utilisateur user = new Utilisateur();
@@ -48,6 +50,7 @@ public class AuthService {
                             user.setPrenom(prenom);
                             user.setEmail(userEmail);
                             user.setRole(role);
+                            user.setDepartement(departement);
                             
                             // Initialiser la session
                             sessionManager.initializeSession(token, user);

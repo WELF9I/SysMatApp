@@ -23,6 +23,7 @@ public class SidebarController implements Initializable {
     @FXML private Button reservationsButton;
     @FXML private Button usersButton;
     @FXML private Button reportsButton;
+    @FXML private Button newReservationButton;
     @FXML private Button logoutButton;
 
     private final SessionManager sessionManager = SessionManager.getInstance();
@@ -30,22 +31,33 @@ public class SidebarController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Check user role and hide admin-only buttons if professor
+        // Check user role and setup UI accordingly
         if (sessionManager.getCurrentUser() != null) {
             String role = sessionManager.getCurrentUser().getRole();
-            if (AppConfig.ROLE_PROFESSEUR.equals(role)) {
-                setProfessorMode(true);
-            }
+            setProfessorMode(AppConfig.ROLE_PROFESSEUR.equals(role));
         }
     }
 
     public void setProfessorMode(boolean professorMode) {
         this.isProfessorMode = professorMode;
-        if (professorMode && usersButton != null && reportsButton != null) {
-            usersButton.setVisible(false);
-            usersButton.setManaged(false);
-            reportsButton.setVisible(false);
-            reportsButton.setManaged(false);
+        if (professorMode) {
+            if (usersButton != null) {
+                usersButton.setVisible(false);
+                usersButton.setManaged(false);
+            }
+            if (reportsButton != null) {
+                reportsButton.setVisible(false);
+                reportsButton.setManaged(false);
+            }
+            if (newReservationButton != null) {
+                newReservationButton.setVisible(true);
+                newReservationButton.setManaged(true);
+            }
+        } else {
+            if (newReservationButton != null) {
+                newReservationButton.setVisible(false);
+                newReservationButton.setManaged(false);
+            }
         }
     }
 
@@ -149,6 +161,23 @@ public class SidebarController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
             DialogUtil.showError("Erreur", "Impossible de charger la page des rapports");
+        }
+    }
+
+    @FXML
+    private void navigateToNewReservation() {
+        if (!isProfessorMode) return;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(AppConfig.VIEW_NEW_RESERVATION));
+            Parent root = loader.load();
+            
+            Stage stage = (Stage) newReservationButton.getScene().getWindow();
+            stage.getScene().setRoot(root);
+            stage.centerOnScreen();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+            DialogUtil.showError("Erreur", "Impossible de charger le formulaire de réservation");
         }
     }
 

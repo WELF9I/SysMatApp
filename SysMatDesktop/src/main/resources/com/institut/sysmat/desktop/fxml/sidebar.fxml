@@ -41,6 +41,16 @@
             </graphic>
         </Button>
         
+        <Button fx:id="newReservationButton" text="Nouvelle Réservation" 
+                styleClass="sidebar-button" onAction="#navigateToNewReservation"
+                visible="false" managed="false">
+            <graphic>
+                <ImageView fitWidth="20" fitHeight="20">
+                    <Image url="@../images/icons/add.png" />
+                </ImageView>
+            </graphic>
+        </Button>
+        
         <Button fx:id="usersButton" text="Utilisateurs" 
                 styleClass="sidebar-button" onAction="#navigateToUsers">
             <graphic>

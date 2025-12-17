@@ -58,12 +58,6 @@ public class AdminDashboardController implements Initializable {
     @FXML private StackPane loadingPane;
     @FXML private ProgressIndicator loadingIndicator;
     
-    @FXML private Button materialsButton;
-    @FXML private Button reservationsButton;
-    @FXML private Button usersButton;
-    @FXML private Button reportsButton;
-    @FXML private Button logoutButton;
-    
     private final SessionManager sessionManager = SessionManager.getInstance();
     private final MaterielService materielService = new MaterielService();
     private final ReservationService reservationService = new ReservationService();
@@ -240,11 +234,39 @@ public class AdminDashboardController implements Initializable {
     }
     
     private void setupEventHandlers() {
-        materialsButton.setOnAction(event -> navigateToMaterials());
-        reservationsButton.setOnAction(event -> navigateToReservations());
-        usersButton.setOnAction(event -> navigateToUsers());
-        reportsButton.setOnAction(event -> navigateToReports());
-        logoutButton.setOnAction(event -> handleLogout());
+        // Handlers for dashboard items if any
+    }
+
+    @FXML
+    private void navigateToMaterials() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(AppConfig.VIEW_MATERIELS));
+            Parent root = loader.load();
+            
+            Stage stage = (Stage) welcomeLabel.getScene().getWindow();
+            stage.getScene().setRoot(root);
+            stage.centerOnScreen();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+            DialogUtil.showError("Erreur", "Impossible de charger la page des matériels");
+        }
+    }
+    
+    @FXML
+    private void navigateToReservations() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(AppConfig.VIEW_RESERVATIONS));
+            Parent root = loader.load();
+            
+            Stage stage = (Stage) welcomeLabel.getScene().getWindow();
+            stage.getScene().setRoot(root);
+            stage.centerOnScreen();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+            DialogUtil.showError("Erreur", "Impossible de charger la page des réservations");
+        }
     }
     
     private void showReservationActionDialog(Reservation reservation) {
@@ -272,99 +294,8 @@ public class AdminDashboardController implements Initializable {
     }
     
     @FXML
-    private void navigateToMaterials() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(AppConfig.VIEW_MATERIELS));
-            Parent root = loader.load();
-            
-            Stage stage = (Stage) materialsButton.getScene().getWindow();
-            stage.getScene().setRoot(root);
-            stage.centerOnScreen();
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-            DialogUtil.showError("Erreur", "Impossible de charger la page des matériels");
-        }
-    }
-    
-    @FXML
-    private void navigateToReservations() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(AppConfig.VIEW_RESERVATIONS));
-            Parent root = loader.load();
-            
-            Stage stage = (Stage) reservationsButton.getScene().getWindow();
-            stage.getScene().setRoot(root);
-            stage.centerOnScreen();
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-            DialogUtil.showError("Erreur", "Impossible de charger la page des réservations");
-        }
-    }
-    
-    @FXML
-    private void navigateToUsers() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(AppConfig.VIEW_USERS));
-            Parent root = loader.load();
-            
-            Stage stage = (Stage) usersButton.getScene().getWindow();
-            stage.getScene().setRoot(root);
-            stage.centerOnScreen();
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-            DialogUtil.showError("Erreur", "Impossible de charger la page des utilisateurs");
-        }
-    }
-    
-    @FXML
-    private void navigateToReports() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(AppConfig.VIEW_REPORTS));
-            Parent root = loader.load();
-            
-            Stage stage = (Stage) reportsButton.getScene().getWindow();
-            stage.getScene().setRoot(root);
-            stage.centerOnScreen();
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-            DialogUtil.showError("Erreur", "Impossible de charger la page des rapports");
-        }
-    }
-    
-    @FXML
-    private void handleLogout() {
-        if (DialogUtil.showConfirmation("Déconnexion", "Êtes-vous sûr de vouloir vous déconnecter ?")) {
-            sessionManager.clearSession();
-            navigateToLogin();
-        }
-    }
-    
-    @FXML
     private void handleRefresh() {
         loadDashboardData();
-    }
-    
-    private void navigateToLogin() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(AppConfig.VIEW_LOGIN));
-            Parent root = loader.load();
-            
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(Objects.requireNonNull(
-                getClass().getResource(AppConfig.CSS_STYLES)).toExternalForm());
-            
-            Stage stage = (Stage) logoutButton.getScene().getWindow();
-            stage.setScene(scene);
-            stage.centerOnScreen();
-            stage.setMaximized(false);
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
     
     private void showLoading(boolean show) {

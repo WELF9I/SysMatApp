@@ -47,7 +47,6 @@
                     <Label fx:id="departmentLabel" text="Département: Informatique" 
                            style="-fx-text-fill: #7f8c8d; -fx-font-size: 11;" />
                 </VBox>
-                <Circle radius="20" fill="#3498db" />
                 <ImageView fitWidth="30" fitHeight="30" layoutX="-15" layoutY="-15">
                     <Image url="@../images/icons/user.png" />
                 </ImageView>
@@ -59,62 +58,7 @@
         <HBox spacing="0" VBox.vgrow="ALWAYS">
             
             <!-- Sidebar -->
-            <VBox prefWidth="250" style="-fx-background-color: #2c3e50;" spacing="0">
-                
-                <VBox spacing="10" style="-fx-padding: 30 20;">
-                    
-                    <Button fx:id="dashboardButton" text="Tableau de bord" 
-                            styleClass="sidebar-button-active">
-                        <graphic>
-                            <ImageView fitWidth="20" fitHeight="20">
-                                <Image url="@../images/icons/dashboard.png" />
-                            </ImageView>
-                        </graphic>
-                    </Button>
-                    
-                    <Button fx:id="materialsButton" text="Matériels disponibles" 
-                            styleClass="sidebar-button" onAction="#navigateToMaterials">
-                        <graphic>
-                            <ImageView fitWidth="20" fitHeight="20">
-                                <Image url="@../images/icons/materials.png" />
-                            </ImageView>
-                        </graphic>
-                    </Button>
-                    
-                    <Button fx:id="newReservationButton" text="Nouvelle réservation" 
-                            styleClass="sidebar-button" onAction="#navigateToNewReservation">
-                        <graphic>
-                            <ImageView fitWidth="20" fitHeight="20">
-                                <Image url="@../images/icons/add.png" />
-                            </ImageView>
-                        </graphic>
-                    </Button>
-                    
-                    <Button fx:id="myReservationsButton" text="Mes réservations" 
-                            styleClass="sidebar-button" onAction="#navigateToMyReservations">
-                        <graphic>
-                            <ImageView fitWidth="20" fitHeight="20">
-                                <Image url="@../images/icons/reservations.png" />
-                            </ImageView>
-                        </graphic>
-                    </Button>
-                    
-                    <VBox VBox.vgrow="ALWAYS" />
-                    
-                    <Line startX="0" endX="210" stroke="#34495e" strokeWidth="1" />
-                    
-                    <Button fx:id="logoutButton" text="Déconnexion" 
-                            styleClass="sidebar-button-logout" onAction="#handleLogout">
-                        <graphic>
-                            <ImageView fitWidth="20" fitHeight="20">
-                                <Image url="@../images/icons/logout.png" />
-                            </ImageView>
-                        </graphic>
-                    </Button>
-                    
-                </VBox>
-                
-            </VBox>
+            <fx:include source="sidebar.fxml" />
             
             <!-- Main Content -->
             <VBox spacing="20" style="-fx-padding: 30;" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">

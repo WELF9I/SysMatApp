@@ -42,10 +42,6 @@ public class AuthController {
                 handleLogin();
             }
         });
-        
-        // Données de test pour faciliter le développement
-        emailField.setText("admin@institut.edu");
-        passwordField.setText("admin123");
     }
     
     @FXML

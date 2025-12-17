@@ -65,72 +65,7 @@
         <HBox spacing="0" VBox.vgrow="ALWAYS">
             
             <!-- Sidebar -->
-            <VBox prefWidth="250" style="-fx-background-color: #2c3e50;" spacing="0">
-                
-                <!-- Navigation Menu -->
-                <VBox spacing="10" style="-fx-padding: 30 20;">
-                    
-                    <Button fx:id="dashboardButton" text="Tableau de bord" 
-                            styleClass="sidebar-button-active">
-                        <graphic>
-                            <ImageView fitWidth="20" fitHeight="20">
-                                <Image url="@../images/icons/dashboard.png" />
-                            </ImageView>
-                        </graphic>
-                    </Button>
-                    
-                    <Button fx:id="materialsButton" text="Matériels" 
-                            styleClass="sidebar-button" onAction="#navigateToMaterials">
-                        <graphic>
-                            <ImageView fitWidth="20" fitHeight="20">
-                                <Image url="@../images/icons/materials.png" />
-                            </ImageView>
-                        </graphic>
-                    </Button>
-                    
-                    <Button fx:id="reservationsButton" text="Réservations" 
-                            styleClass="sidebar-button" onAction="#navigateToReservations">
-                        <graphic>
-                            <ImageView fitWidth="20" fitHeight="20">
-                                <Image url="@../images/icons/reservations.png" />
-                            </ImageView>
-                        </graphic>
-                    </Button>
-                    
-                    <Button fx:id="usersButton" text="Utilisateurs" 
-                            styleClass="sidebar-button" onAction="#navigateToUsers">
-                        <graphic>
-                            <ImageView fitWidth="20" fitHeight="20">
-                                <Image url="@../images/icons/users.png" />
-                            </ImageView>
-                        </graphic>
-                    </Button>
-                    
-                    <Button fx:id="reportsButton" text="Rapports" 
-                            styleClass="sidebar-button" onAction="#navigateToReports">
-                        <graphic>
-                            <ImageView fitWidth="20" fitHeight="20">
-                                <Image url="@../images/icons/reports.png" />
-                            </ImageView>
-                        </graphic>
-                    </Button>
-                    
-                    <VBox VBox.vgrow="ALWAYS" />
-                    
-                    <Line startX="0" endX="210" stroke="#34495e" strokeWidth="1" />
-                    
-                    <Button fx:id="logoutButton" text="Déconnexion" 
-                            styleClass="sidebar-button-logout" onAction="#handleLogout">
-                        <graphic>
-                            <ImageView fitWidth="20" fitHeight="20">
-                                <Image url="@../images/icons/logout.png" />
-                            </ImageView>
-                        </graphic>
-                    </Button>
-                    
-                </VBox>
-                
-            </VBox>
+            <fx:include source="sidebar.fxml" />
             
             <!-- Main Content -->
             <VBox spacing="20" style="-fx-padding: 30;" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">

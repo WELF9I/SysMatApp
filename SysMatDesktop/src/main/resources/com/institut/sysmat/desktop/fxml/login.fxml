@@ -53,13 +53,6 @@
                 </HBox>
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <ImageView fitWidth="24" fitHeight="24">
-                        <Image url="@../images/icons/calendar.png" />
-                    </ImageView>
-                    <Label text="Réservation en temps réel" 
-                           style="-fx-text-fill: #bdc3c7; -fx-font-size: 14;" />
-                </HBox>
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <ImageView fitWidth="24" fitHeight="24">
                         <Image url="@../images/icons/security.png" />
                     </ImageView>
                     <Label text="Sécurité et authentification" 
@@ -67,7 +60,7 @@
                 </HBox>
             </VBox>
             
-            <Label text="Institut Supérieur de Technologie" 
+            <Label text="IT Business School" 
                    style="-fx-text-fill: #7f8c8d; -fx-font-size: 12; -fx-font-style: italic;" />
         </VBox>
         

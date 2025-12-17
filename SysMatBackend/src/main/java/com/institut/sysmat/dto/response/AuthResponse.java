@@ -7,15 +7,17 @@ public class AuthResponse {
     private String nom;
     private String prenom;
     private String email;
+    private String departement;
     
     public AuthResponse() {}
     
-    public AuthResponse(String token, String role, String nom, String prenom, String email) {
+    public AuthResponse(String token, String role, String nom, String prenom, String email, String departement) {
         this.token = token;
         this.role = role;
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
+        this.departement = departement;
     }
     
     // Getters and Setters
@@ -36,4 +38,7 @@ public class AuthResponse {
     
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+    
+    public String getDepartement() { return departement; }
+    public void setDepartement(String departement) { this.departement = departement; }
 }

@@ -45,7 +45,8 @@ public class AuthService {
             userDetails.getRole(),
             userDetails.getNom(),
             userDetails.getPrenom(),
-            userDetails.getUsername()
+            userDetails.getUsername(),
+            userDetails.getDepartement()
         );
     }
     

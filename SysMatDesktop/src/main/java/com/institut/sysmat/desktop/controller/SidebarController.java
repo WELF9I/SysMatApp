@@ -5,15 +5,18 @@ import com.institut.sysmat.desktop.service.SessionManager;
 import com.institut.sysmat.desktop.util.DialogUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
-public class SidebarController {
+public class SidebarController implements Initializable {
 
     @FXML private Button dashboardButton;
     @FXML private Button materialsButton;
@@ -23,6 +26,28 @@ public class SidebarController {
     @FXML private Button logoutButton;
 
     private final SessionManager sessionManager = SessionManager.getInstance();
+    private boolean isProfessorMode = false;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // Check user role and hide admin-only buttons if professor
+        if (sessionManager.getCurrentUser() != null) {
+            String role = sessionManager.getCurrentUser().getRole();
+            if (AppConfig.ROLE_PROFESSEUR.equals(role)) {
+                setProfessorMode(true);
+            }
+        }
+    }
+
+    public void setProfessorMode(boolean professorMode) {
+        this.isProfessorMode = professorMode;
+        if (professorMode && usersButton != null && reportsButton != null) {
+            usersButton.setVisible(false);
+            usersButton.setManaged(false);
+            reportsButton.setVisible(false);
+            reportsButton.setManaged(false);
+        }
+    }
 
     @FXML
     private void navigateToDashboard() {
@@ -53,22 +78,78 @@ public class SidebarController {
 
     @FXML
     private void navigateToMaterials() {
-        navigate(AppConfig.VIEW_MATERIELS, materialsButton);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(AppConfig.VIEW_MATERIELS));
+            Parent root = loader.load();
+            
+            // Set professor mode if needed
+            if (isProfessorMode) {
+                MaterielController controller = loader.getController();
+                controller.setProfessorMode(true);
+            }
+            
+            Stage stage = (Stage) materialsButton.getScene().getWindow();
+            stage.getScene().setRoot(root);
+            stage.centerOnScreen();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+            DialogUtil.showError("Erreur", "Impossible de charger la page des matériels");
+        }
     }
 
     @FXML
     private void navigateToReservations() {
-        navigate(AppConfig.VIEW_RESERVATIONS, reservationsButton);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(AppConfig.VIEW_RESERVATIONS));
+            Parent root = loader.load();
+            
+            // Set professor mode if needed
+            if (isProfessorMode) {
+                ReservationController controller = loader.getController();
+                controller.setProfessorMode(true);
+            }
+            
+            Stage stage = (Stage) reservationsButton.getScene().getWindow();
+            stage.getScene().setRoot(root);
+            stage.centerOnScreen();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+            DialogUtil.showError("Erreur", "Impossible de charger la page des réservations");
+        }
     }
 
     @FXML
     private void navigateToUsers() {
-        navigate(AppConfig.VIEW_USERS, usersButton);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(AppConfig.VIEW_USERS));
+            Parent root = loader.load();
+            
+            Stage stage = (Stage) usersButton.getScene().getWindow();
+            stage.getScene().setRoot(root);
+            stage.centerOnScreen();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+            DialogUtil.showError("Erreur", "Impossible de charger la page des utilisateurs");
+        }
     }
 
     @FXML
     private void navigateToReports() {
-        navigate(AppConfig.VIEW_REPORTS, reportsButton);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(AppConfig.VIEW_REPORTS));
+            Parent root = loader.load();
+            
+            Stage stage = (Stage) reportsButton.getScene().getWindow();
+            stage.getScene().setRoot(root);
+            stage.centerOnScreen();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+            DialogUtil.showError("Erreur", "Impossible de charger la page des rapports");
+        }
     }
 
     @FXML
@@ -76,21 +157,6 @@ public class SidebarController {
         if (DialogUtil.showConfirmation("Déconnexion", "Êtes-vous sûr de vouloir vous déconnecter ?")) {
             sessionManager.clearSession();
             navigateToLogin();
-        }
-    }
-
-    private void navigate(String fxmlPath, Button sourceButton) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            Parent root = loader.load();
-            
-            Stage stage = (Stage) sourceButton.getScene().getWindow();
-            stage.getScene().setRoot(root);
-            stage.centerOnScreen();
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-            DialogUtil.showError("Erreur", "Impossible de charger la page");
         }
     }
 

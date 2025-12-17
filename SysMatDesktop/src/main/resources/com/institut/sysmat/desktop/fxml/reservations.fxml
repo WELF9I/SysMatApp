@@ -60,10 +60,10 @@
                 <VBox styleClass="card" spacing="15">
                     <HBox spacing="15" alignment="CENTER_LEFT">
                         <DatePicker fx:id="startDatePicker" promptText="Date début" 
-                                    styleClass="form-field" />
+                                    styleClass="form-field" prefWidth="150" />
                         <Label text="à" />
                         <DatePicker fx:id="endDatePicker" promptText="Date fin" 
-                                    styleClass="form-field" />
+                                    styleClass="form-field" prefWidth="150" />
                         
                         <ComboBox fx:id="statusFilterCombo" promptText="Statut"
                                   styleClass="form-field" prefWidth="150" />
@@ -74,7 +74,7 @@
                         <TextField fx:id="userSearchField" promptText="Rechercher utilisateur..."
                                    styleClass="form-field" prefWidth="200" />
                         
-                        <Button text="Appliquer" styleClass="primary-button" onAction="#applyFilters">
+                        <Button text="Appliquer" styleClass="primary-button" onAction="#applyFilters" prefWidth="100">
                             <graphic>
                                 <ImageView fitWidth="16" fitHeight="16">
                                     <Image url="@../images/icons/filter.png" />
@@ -82,7 +82,7 @@
                             </graphic>
                         </Button>
                         
-                        <Button text="Réinitialiser" styleClass="small-button" onAction="#resetFilters" />
+                        <Button text="Réinitialiser" styleClass="secondary-button" onAction="#resetFilters" prefWidth="120" />
                     </HBox>
                     
                     <!-- Stats Bar -->

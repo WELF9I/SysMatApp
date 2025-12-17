@@ -55,7 +55,7 @@
         <HBox alignment="CENTER_RIGHT" spacing="10.0">
             <children>
                 <Button mnemonicParsing="false" onAction="#handleCancel" text="Annuler" />
-                <Button mnemonicParsing="false" onAction="#handleSave" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Enregistrer" />
+                <Button fx:id="saveButton" mnemonicParsing="false" onAction="#handleSave" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Enregistrer" />
             </children>
         </HBox>
     </children>

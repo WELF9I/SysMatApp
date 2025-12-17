@@ -86,6 +86,12 @@ public class ApiService {
                     put.setEntity(new StringEntity(gson.toJson(requestBody), StandardCharsets.UTF_8));
                 }
                 return put;
+            case PATCH:
+                HttpPatch patch = new HttpPatch(url);
+                if (requestBody != null) {
+                    patch.setEntity(new StringEntity(gson.toJson(requestBody), StandardCharsets.UTF_8));
+                }
+                return patch;
             case DELETE:
                 return new HttpDelete(url);
             default:
@@ -129,6 +135,6 @@ public class ApiService {
     
     // Enum pour les méthodes HTTP
     public enum HttpMethod {
-        GET, POST, PUT, DELETE
+        GET, POST, PUT, PATCH, DELETE
     }
 }

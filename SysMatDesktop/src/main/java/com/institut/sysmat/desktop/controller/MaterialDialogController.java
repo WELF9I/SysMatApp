@@ -3,7 +3,10 @@ package com.institut.sysmat.desktop.controller;
 import com.institut.sysmat.desktop.model.Materiel;
 import com.institut.sysmat.desktop.service.MaterielService;
 import com.institut.sysmat.desktop.util.DialogUtil;
+import javafx.application.Platform;
+import javafx.concurrent.Service;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -51,6 +54,8 @@ public class MaterialDialogController {
         this.onSaveCallback = callback;
     }
 
+    @FXML private Button saveButton;
+
     @FXML
     private void handleSave() {
         if (!validateInput()) return;
@@ -61,18 +66,44 @@ public class MaterialDialogController {
 
         material.setNom(nomField.getText());
         material.setTypeMateriel(typeCombo.getValue());
-        material.setQuantiteTotale(Integer.parseInt(quantiteField.getText()));
+        try {
+            material.setQuantiteTotale(Integer.parseInt(quantiteField.getText()));
+        } catch (NumberFormatException e) {
+            DialogUtil.showError("Erreur", "La quantité doit être un nombre entier valide");
+            return;
+        }
         material.setEtat(etatCombo.getValue());
         material.setLocalisation(localisationField.getText());
         material.setDescription(descriptionArea.getText());
 
-        // In a real app, you would call the service here.
-        // Since I don't have the full service code, I'll assume a method exists or just simulate it.
-        // materielService.save(material); 
+        if (saveButton != null) saveButton.setDisable(true);
         
-        // Close and callback
-        closeDialog();
-        if (onSaveCallback != null) onSaveCallback.run();
+        Service<Materiel> service;
+        if (mode == Mode.ADD) {
+            service = materielService.createMateriel(material);
+        } else {
+            service = materielService.updateMateriel(material);
+        }
+        
+        service.setOnSucceeded(event -> {
+            Platform.runLater(() -> {
+                if (saveButton != null) saveButton.setDisable(false);
+                DialogUtil.showSuccess("Succès", "Matériel enregistré avec succès");
+                closeDialog();
+                if (onSaveCallback != null) onSaveCallback.run();
+            });
+        });
+        
+        service.setOnFailed(event -> {
+            Platform.runLater(() -> {
+                if (saveButton != null) saveButton.setDisable(false);
+                Throwable exception = event.getSource().getException();
+                String msg = exception != null ? exception.getMessage() : "Erreur inconnue";
+                DialogUtil.showError("Erreur", "Impossible d'enregistrer le matériel: " + msg);
+            });
+        });
+        
+        service.start();
     }
 
     @FXML

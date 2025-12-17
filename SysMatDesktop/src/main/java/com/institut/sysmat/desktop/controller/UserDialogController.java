@@ -3,7 +3,10 @@ package com.institut.sysmat.desktop.controller;
 import com.institut.sysmat.desktop.model.Utilisateur;
 import com.institut.sysmat.desktop.service.UsersService;
 import com.institut.sysmat.desktop.util.DialogUtil;
+import javafx.application.Platform;
+import javafx.concurrent.Service;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -19,6 +22,7 @@ public class UserDialogController {
     @FXML private ComboBox<String> roleCombo;
     @FXML private TextField departementField;
     @FXML private PasswordField passwordField;
+    @FXML private Button saveButton;
 
     private Mode mode;
     private Utilisateur user;
@@ -33,7 +37,6 @@ public class UserDialogController {
     public void setMode(Mode mode) {
         this.mode = mode;
         if (mode == Mode.EDIT) {
-            passwordField.setDisable(true);
             passwordField.setPromptText("Laisser vide pour ne pas changer");
         }
     }
@@ -67,11 +70,36 @@ public class UserDialogController {
         user.setRole(roleCombo.getValue());
         user.setDepartement(departementField.getText());
 
-        // In a real app, handle password and save via service
-        // usersService.save(user, passwordField.getText());
+        String password = passwordField.getText();
         
-        closeDialog();
-        if (onSaveCallback != null) onSaveCallback.run();
+        if (saveButton != null) saveButton.setDisable(true);
+        
+        Service<Utilisateur> service;
+        if (mode == Mode.ADD) {
+            service = usersService.createUser(user, password);
+        } else {
+            service = usersService.updateUser(user, password);
+        }
+        
+        service.setOnSucceeded(event -> {
+            Platform.runLater(() -> {
+                if (saveButton != null) saveButton.setDisable(false);
+                DialogUtil.showSuccess("Succès", "Utilisateur enregistré avec succès");
+                closeDialog();
+                if (onSaveCallback != null) onSaveCallback.run();
+            });
+        });
+        
+        service.setOnFailed(event -> {
+            Platform.runLater(() -> {
+                if (saveButton != null) saveButton.setDisable(false);
+                Throwable exception = event.getSource().getException();
+                String msg = exception != null ? exception.getMessage() : "Erreur inconnue";
+                DialogUtil.showError("Erreur", "Impossible d'enregistrer l'utilisateur: " + msg);
+            });
+        });
+        
+        service.start();
     }
 
     @FXML

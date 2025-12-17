@@ -30,12 +30,4 @@
     <Button fx:id="backButton" text="Retour" styleClass="secondary-button" 
             onAction="#handleBack" visible="false" />
     
-    <Button fx:id="refreshButton" text="Actualiser" styleClass="secondary-button" 
-            onAction="#handleRefresh">
-        <graphic>
-            <ImageView fitWidth="16" fitHeight="16">
-                <Image url="@../images/icons/refresh.png" />
-            </ImageView>
-        </graphic>
-    </Button>
 </HBox>

@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 
 <StackPane xmlns="http://javafx.com/javafx/17.0.2-ea" 
            xmlns:fx="http://javafx.com/fxml/1"

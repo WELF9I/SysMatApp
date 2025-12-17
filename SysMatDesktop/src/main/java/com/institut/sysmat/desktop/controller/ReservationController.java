@@ -310,17 +310,54 @@ public class ReservationController implements Initializable {
         materialFilterCombo.getSelectionModel().selectFirst();
     }
     
+    @FXML private TextField startTimeField;
+    @FXML private TextField endTimeField;
+
     @FXML
     private void applyFilters() {
         LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
+        String startTimeStr = startTimeField.getText();
+        String endTimeStr = endTimeField.getText();
+        
         String selectedStatus = statusFilterCombo.getValue();
         String selectedMaterial = materialFilterCombo.getValue();
         String searchTerm = userSearchField.getText().toLowerCase();
         
+        LocalTime startTime = null;
+        LocalTime endTime = null;
+        
+        try {
+            if (startTimeStr != null && !startTimeStr.isEmpty()) {
+                startTime = LocalTime.parse(startTimeStr, timeFormatter);
+            }
+            if (endTimeStr != null && !endTimeStr.isEmpty()) {
+                endTime = LocalTime.parse(endTimeStr, timeFormatter);
+            }
+        } catch (Exception e) {
+            // Ignore invalid time format for filtering
+        }
+        
+        final LocalTime finalStartTime = startTime;
+        final LocalTime finalEndTime = endTime;
+        
         List<Reservation> filtered = allReservations.stream()
-            .filter(r -> startDate == null || r.getDateDebut().toLocalDate().isAfter(startDate.minusDays(1)))
-            .filter(r -> endDate == null || r.getDateDebut().toLocalDate().isBefore(endDate.plusDays(1)))
+            .filter(r -> {
+                if (startDate == null) return true;
+                LocalDateTime startDateTime = r.getDateDebut();
+                if (finalStartTime != null) {
+                    return startDateTime.isAfter(LocalDateTime.of(startDate, finalStartTime).minusSeconds(1));
+                }
+                return startDateTime.toLocalDate().isAfter(startDate.minusDays(1));
+            })
+            .filter(r -> {
+                if (endDate == null) return true;
+                LocalDateTime endDateTime = r.getDateDebut(); // Filter based on start date usually
+                if (finalEndTime != null) {
+                    return endDateTime.isBefore(LocalDateTime.of(endDate, finalEndTime).plusSeconds(1));
+                }
+                return endDateTime.toLocalDate().isBefore(endDate.plusDays(1));
+            })
             .filter(r -> "Tous".equals(selectedStatus) || r.getStatut().equals(selectedStatus))
             .filter(r -> "Tous".equals(selectedMaterial) || r.getMaterielNom().equals(selectedMaterial))
             .filter(r -> searchTerm.isEmpty() || 
@@ -336,6 +373,8 @@ public class ReservationController implements Initializable {
     private void resetFilters() {
         startDatePicker.setValue(LocalDate.now().minusDays(30));
         endDatePicker.setValue(LocalDate.now());
+        if (startTimeField != null) startTimeField.clear();
+        if (endTimeField != null) endTimeField.clear();
         statusFilterCombo.getSelectionModel().selectFirst();
         materialFilterCombo.getSelectionModel().selectFirst();
         userSearchField.clear();
